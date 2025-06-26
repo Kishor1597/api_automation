@@ -3,6 +3,7 @@ package com.api.tests;
 import com.api.framework.base.BaseTest;
 import com.api.framework.client.RequestFactory;
 import com.api.framework.reports.ExtentLogger;
+import com.api.framework.utils.DataProviderUtils;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -11,15 +12,14 @@ import java.io.IOException;
 
 public class SampleAPITest extends BaseTest {
 
-    @Test
-    public void getUsersTest() throws IOException {
-        test = extent.createTest("GET Users API Test");
-        RequestFactory rf = new RequestFactory();
+    @Test(dataProvider = "userCSVData", dataProviderClass = DataProviderUtils.class)
+    public void createUserTest(String name, String job) throws IOException {
+        test = extent.createTest("Create User: " + name);
 
-        Response response = rf.get("/api/users?page=2");
+        String jsonBody = String.format("{\"name\": \"%s\", \"job\": \"%s\"}", name, job);
+        Response response = new RequestFactory().post("/api/users", jsonBody);
 
-        ExtentLogger.info("Status Code: " + response.getStatusCode());
-        Assert.assertEquals(response.getStatusCode(), 200);
-        ExtentLogger.pass("API responded with status 200");
+        Assert.assertEquals(response.getStatusCode(), 201);
+        ExtentLogger.pass("User created with status code 201");
     }
 }
