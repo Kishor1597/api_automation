@@ -1,0 +1,6 @@
+<configuration>
+  <theme>standard</theme>
+  <encoding>utf-8</encoding>
+  <documentTitle>API Automation Report</documentTitle>
+  <reportName>API Test Report</reportName>
+</configuration>
